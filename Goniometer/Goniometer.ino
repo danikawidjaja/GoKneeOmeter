@@ -16,7 +16,8 @@ const int BUTTON_FREEZE_PIN = 2;
 const int BUTTON_CALIBRATE_PIN = 3;
 
 
-bool buttonToggle = true;
+// Flags
+bool buttonToggle = true; //freeze button
 bool calibrate = false;
 
 // Actual voltage and resistor used
@@ -27,7 +28,7 @@ const float R_DIV = 61000; // Measured resistance of 3.3k resistor
 const float STRAIGHT_RESISTANCE = 10399.31; // resistance when straight
 const float BEND_RESISTANCE = 20148.25; // resistance at 90 deg
 
-int tare = 0;
+int tare = 0; // for calibration
 
 void setup(){
   // Initializing flex pins to input
@@ -37,21 +38,22 @@ void setup(){
   // Initializing the LCD columns and rows
   lcd.begin(16, 2);
 
-  // Init Button
+  // Initializing buttons
   pinMode(BUTTON_FREEZE_PIN, INPUT_PULLUP);
   attachInterrupt(digitalPinToInterrupt(BUTTON_FREEZE_PIN), toggle, RISING);
-
   pinMode(BUTTON_FREEZE_PIN, INPUT_PULLUP);
   attachInterrupt(digitalPinToInterrupt(BUTTON_CALIBRATE_PIN), toggle_calibrate, RISING);
 }
 
 void loop(){
+  // Will only read angle if freeze button not pressed
   while (buttonToggle == true){
     readAngle();
   }
   delay(400);
 }
 
+// Toggling freeze button flag
 void toggle(){
   if (buttonToggle == true){
     buttonToggle = false;
@@ -61,19 +63,22 @@ void toggle(){
   }
 }
 
+//Toggling calibrate flag
 void toggle_calibrate(){
   calibrate = true;
 }
 
 
+//Printing top half display of the LCD
 void lcdTop(){
   // Printing company name
   lcd.setCursor(0, 0);
   lcd.print("Go-Knee-oMeter"); 
-  batterylevel(15,0); // Displaying battery level 
-
-  
+  batterylevel(15,0); // Displaying battery level  
 }
+
+
+// Reading the angle from the flex sensor
 void readAngle(){
   lcd.clear();
   lcdTop();
@@ -82,19 +87,22 @@ void readAngle(){
   // Read the ADC, and calculate voltage and resistance from it
   int flexADC_1 = analogRead(FLEX_PIN_1);
   float flexV = flexADC_1 * VCC / 1023.0;
-  float flexR = R_DIV * (VCC / flexV - 1.0);
-    
+  float flexR = R_DIV * (VCC / flexV - 1.0);  
   // Use the calculated resistance to estimate the sensor'sbend angle:
   float angle = mapfloat(flexR, STRAIGHT_RESISTANCE, BEND_RESISTANCE, 0, 90.0);                            
   
   // Flex Sensor 2
+  // Read the ADC, and calculate voltage and resistance from it
   int flexADC_2 = analogRead(FLEX_PIN_2);
   float flexV_2 = flexADC_2 * VCC / 1023.0;
   float flexR_2 = R_DIV * (VCC / flexV_2 - 1.0);
+  // Use the calculated resistance to estimate the sensor'sbend angle:
   float angle_2 = mapfloat(flexR_2, STRAIGHT_RESISTANCE, BEND_RESISTANCE, 0, 90.0);
-  
+
+  // Calibrating measurements
   angle += angle_2;
   angle -= tare;
+  
   // Printing sum of angles to LCD
   lcd.setCursor(0, 1);
   lcd.print(angle,1);
@@ -109,9 +117,12 @@ void readAngle(){
   delay(500);
 }
 
+// Mapping the resistance value to respective angle. 
 float mapfloat(long x, long in_min, long in_max, long out_min, long out_max){
   return (float)(x-in_min)*(out_max - out_min) / (float)(in_max - in_min) + out_min;
 }
+
+// Displaying battery level
 void batterylevel(int xpos,int ypos)
 {
   //read the voltage and convert it to volt
