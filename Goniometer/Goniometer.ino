@@ -117,11 +117,31 @@ void readAngle(){
   delay(500);
 }
 
-// Mapping the resistance value to respective angle. 
+
+/* 
+ *  The mapfloat function coverts flex sensor resistance value to its respective angle.
+ *  The function maps the range of resistance to the range of angle.
+ *  
+ *  Input parameter:
+ *  x = current flex sensor resistance
+ *  in_min = minimum resistance value (flex sensor resistance at 0 deg)
+ *  in_max = maximum resistance value (flex sensor resistance at 90 deg)
+ *  out_min = 0 deg
+ *  out_max = 90 deg
+ *  
+ *  Output = current angle
+ */
 float mapfloat(long x, long in_min, long in_max, long out_min, long out_max){
   return (float)(x-in_min)*(out_max - out_min) / (float)(in_max - in_min) + out_min;
 }
 
+/* The batterylevel function displays the battery level icon on the LCD.
+ * Battery level is displayed in increments of 1/8th.
+ * 
+ * Input:
+ * xpos = x coordinate on LCD of the icon location
+ * ypos = y coordinate on LCD of the icon location
+ */
 // Displaying battery level
 void batterylevel(int xpos,int ypos)
 {
