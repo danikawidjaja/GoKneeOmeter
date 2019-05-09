@@ -148,7 +148,7 @@ void batterylevel(int xpos,int ypos)
   //read the voltage and convert it to volt
   double curvolt = double( readVcc() ) / 1000;
   // check if voltge is bigger than 4.2 volt so this is a power source
-  if(curvolt > 4.2)
+  if(curvolt > 5.8)
   {
     byte batlevel[8] = {
     B01110,
@@ -164,7 +164,7 @@ void batterylevel(int xpos,int ypos)
     lcd.setCursor(xpos,ypos);
     lcd.write(byte(0));
   }
-  if(curvolt <= 4.2 && curvolt > 4.0)
+  if(curvolt <= 5.8 && curvolt > 5.5)
   {
     byte batlevel[8] = {
     B01110,
@@ -180,7 +180,7 @@ void batterylevel(int xpos,int ypos)
     lcd.setCursor(xpos,ypos);
     lcd.write(byte(0));
   }
-  if(curvolt <= 4.0 && curvolt > 3.8)
+  if(curvolt <= 5.5 && curvolt > 5.2)
   {
     byte batlevel[8] = {
     B01110,
@@ -196,7 +196,7 @@ void batterylevel(int xpos,int ypos)
     lcd.setCursor(xpos,ypos);
     lcd.write(byte(0));
   }
-  if(curvolt <= 3.8 && curvolt > 3.6)
+  if(curvolt <= 5.2 && curvolt > 4.9)
   {
     byte batlevel[8] = {
     B01110,
@@ -212,7 +212,7 @@ void batterylevel(int xpos,int ypos)
     lcd.setCursor(xpos,ypos);
     lcd.write(byte(0));
   }
-  if(curvolt <= 3.6 && curvolt > 3.4)
+  if(curvolt <= 4.9 && curvolt > 4.6)
   {
     byte batlevel[8] = {
     B01110,
@@ -228,7 +228,7 @@ void batterylevel(int xpos,int ypos)
     lcd.setCursor(xpos,ypos);
     lcd.write(byte(0));
   }
-  if(curvolt <= 3.4 && curvolt > 3.2)
+  if(curvolt <= 4.6 && curvolt > 4.3)
   {
     byte batlevel[8] = {
     B01110,
@@ -244,7 +244,7 @@ void batterylevel(int xpos,int ypos)
     lcd.setCursor(xpos,ypos);
     lcd.write(byte(0));
   }
-  if(curvolt <= 3.2 && curvolt > 3.0)
+  if(curvolt <= 4.3 && curvolt > 4.0)
   {
     byte batlevel[8] = {
     B01110,
@@ -260,7 +260,7 @@ void batterylevel(int xpos,int ypos)
     lcd.setCursor(xpos,ypos);
     lcd.write(byte(0));
   }
-  if(curvolt < 3.0)
+  if(curvolt < 4.0)
   {
     byte batlevel[8] = {
     B01110,
